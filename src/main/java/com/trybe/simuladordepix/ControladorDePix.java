@@ -1,5 +1,7 @@
 package com.trybe.simuladordepix;
 
+import java.io.IOException;
+
 /**
  * ControladorDePix.
  */
@@ -20,6 +22,13 @@ public class ControladorDePix {
    * @return Mensagem a ser exibida à pessoa usuária, informando-a sobre o resultado da operação.
    */
   public String aoConfirmarPix(int valor, String chave) {
-    return null; // TODO: Implementar.
+    try {
+      processadorDePix.executarPix(valor, chave);
+    } catch (ErroDePix e) {
+      return e.getMessage();
+    } catch (IOException e) {
+      return "Erro de conexão.";
+    }
+    return "Pix realizado com sucesso.";
   }
 }

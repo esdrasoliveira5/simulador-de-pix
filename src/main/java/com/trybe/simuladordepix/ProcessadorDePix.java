@@ -8,7 +8,6 @@ import java.io.IOException;
 public class ProcessadorDePix {
 
   private final Servidor servidor;
-  Conexao conexao = null;
 
   public ProcessadorDePix(Servidor servidor) {
     this.servidor = servidor;
@@ -27,27 +26,25 @@ public class ProcessadorDePix {
    */
   public void executarPix(int valor, String chave) throws ErroDePix, IOException {
     // TODO: Implementar.
-    if (valor < 0) {
+    if (valor <= 0) {
       throw new ErroValorNaoPositivo();
     }
     if (chave.isEmpty() || chave.isBlank()) {
       throw new ErroChaveEmBranco();
     }
-
     try {
-      servidor.abrirConexao();
-      String resultConexao = conexao.enviarPix(valor, chave);
+      String resultConexao = servidor.abrirConexao().enviarPix(valor, chave);
 
-      if (resultConexao == "saldo_insuficiente") {
+      if (resultConexao == CodigosDeRetorno.SALDO_INSUFICIENTE) {
         throw new ErroSaldoInsuficiente();
-      } else if (resultConexao == "chave_pix_nao_encontrada") {
+      } else if (resultConexao == CodigosDeRetorno.CHAVE_PIX_NAO_ENCONTRADA) {
         throw new ErroChaveNaoEncontrada();
-      } else if (resultConexao != "sucesso") {
+      } else if (resultConexao != CodigosDeRetorno.SUCESSO) {
         throw new ErroInterno();
       }
-
+      return;
     } finally {
-      conexao.close();
+      servidor.abrirConexao().close();
     }
 
   }
