@@ -8,6 +8,7 @@ import java.io.IOException;
 public class ProcessadorDePix {
 
   private final Servidor servidor;
+  Conexao conexao = null;
 
   public ProcessadorDePix(Servidor servidor) {
     this.servidor = servidor;
@@ -33,7 +34,21 @@ public class ProcessadorDePix {
       throw new ErroChaveEmBranco();
     }
 
+    try {
+      servidor.abrirConexao();
+      String resultConexao = conexao.enviarPix(valor, chave);
 
+      if (resultConexao == "saldo_insuficiente") {
+        throw new ErroSaldoInsuficiente();
+      } else if (resultConexao == "chave_pix_nao_encontrada") {
+        throw new ErroChaveNaoEncontrada();
+      } else if (resultConexao != "sucesso") {
+        throw new ErroInterno();
+      }
+
+    } finally {
+      conexao.close();
+    }
 
   }
 
