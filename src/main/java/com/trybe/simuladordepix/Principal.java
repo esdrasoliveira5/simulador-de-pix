@@ -1,5 +1,8 @@
 package com.trybe.simuladordepix;
 
+/**
+ * Principal.
+ */
 public class Principal {
 
   /**

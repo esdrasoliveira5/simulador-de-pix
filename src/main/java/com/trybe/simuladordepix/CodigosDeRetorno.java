@@ -1,5 +1,8 @@
 package com.trybe.simuladordepix;
 
+/**
+ * CodigosDeRetorno.
+ */
 public class CodigosDeRetorno {
 
   public static final String SUCESSO = "sucesso";
